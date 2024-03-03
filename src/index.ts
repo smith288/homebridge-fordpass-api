@@ -115,7 +115,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         callback(undefined, lockNumber);
         
         //lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
-        lockService.updateValue(lockNumber);
+        lockService.getCharacteristic(hap.Characteristic.LockTargetState).updateValue(lockNumber);
 
       });
 
@@ -141,7 +141,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         callback(undefined, engineStatus);
 
         // switchService.updateCharacteristic(hap.Characteristic.On, engineStatus === 'ON');
-        switchService.updateValue(engineStatus === 'ON' ? true : false);
+        switchService.getCharacteristic(hap.Characteristic.On).updateValue(engineStatus === 'ON' ? true : false);
       
       });
 
