@@ -112,7 +112,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         if (lockStatus === 'LOCKED') {
           lockNumber = hap.Characteristic.LockTargetState.SECURED;
         }
-        callback(undefined, lockNumber);
+        //callback(undefined, lockNumber);
         
         lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
 
@@ -137,7 +137,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
         // Return cached value immediately then update properly
         const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value || 'OFF';
-        callback(undefined, engineStatus);
+        //callback(undefined, engineStatus);
 
         switchService.updateCharacteristic(hap.Characteristic.On, engineStatus === 'ON');
       
