@@ -70,4 +70,4 @@ Contributions are welcome! Please submit a pull request or create an issue to co
 
 ## License
 
-This project is licensed under the GPL-3.0 License. See the [`LICENSE`](command:_github.copilot.openRelativePath?%5B%22LICENSE%22%5D "LICENSE") file for details.
+This project is licensed under the Apache-2.0 license. See the [`LICENSE`](command:_github.copilot.openRelativePath?%5B%22LICENSE%22%5D "LICENSE") file for details.
