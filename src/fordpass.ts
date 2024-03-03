@@ -78,6 +78,9 @@ export class Vehicle extends EventEmitter {
         const result = await new Connection(this.config, this.log).issueCommand(this.vehicleId, commandType);
         if (result) {
           this.log.debug(`Issuing command: ${commandType} for vehicle: ${this.vehicleId}`);
+          if(command !== Command.REFRESH){
+            await new Connection(this.config, this.log).issueCommand(this.vehicleId, 'status');
+          }
           this.updating = false;
           return result.commandId;
         }
