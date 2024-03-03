@@ -9,7 +9,7 @@ This is a Homebridge plugin that allows you to integrate your FordPass-enabled v
 - Plug Switch: Adds a button that can trigger automations when your EV is plugged in.
 
 ## Credit
-@Brandawg93 was the basis of this project.  Much of his code was reused for this one. Give them a shoutout!
+[@Brandawg93](https://github.com/Brandawg93/homebridge-fordpass) was the basis of this project.  Much of his code was reused for this one. Give them a shoutout!
 
 ## Installation
 
