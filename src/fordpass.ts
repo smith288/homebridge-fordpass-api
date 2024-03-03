@@ -169,6 +169,7 @@ export class Vehicle extends EventEmitter {
 
     const result = await new Connection(this.config, this.log).getVehicleInformation(this.vehicleId);
     if (result) {
+      this.log.debug(`Retrieved vehicle information for vehicle.  Mileage: ${result.vehicleDetails.mileage} Distance to E: ${result.vehicleDetails.batteryChargeLevel.distanceToEmpty} Tire Pressure Warning: ${result.vehicleStatus.tirePressureWarning}`);
       this.info = result as VehicleInfo;
       this.vehicleId = result.vehicleId;
       this.name = result.nickName;
