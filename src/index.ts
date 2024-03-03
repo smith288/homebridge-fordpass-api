@@ -96,7 +96,9 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         }
         // Just call the command and after 5 seconds update the vehicle info
         await vehicle.issueCommand(command);
+        this.log.debug('Waiting 5 seconds to update vehicle info');
         await new Promise(resolve => setTimeout(resolve, 5000));
+        this.log.debug('Done waiting...Updating vehicle info');
         await vehicle.retrieveVehicleInfo();
       
         const self = this;
