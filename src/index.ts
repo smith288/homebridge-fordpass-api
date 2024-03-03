@@ -94,17 +94,12 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         if (value === hap.Characteristic.LockTargetState.UNSECURED) {
           command = Command.UNLOCK;
         }
-        commandId = await vehicle.issueCommand(command);
-
-        let tries = 30;
-        this.pendingLockUpdate = true;
-        const self = this; 
-        const status = await vehicle.issueCommandRefresh(commandId, command);
-        if (status?.currentStatus === 'SUCCESS') {
-          lockService.updateCharacteristic(hap.Characteristic.LockCurrentState, value);
-          self.pendingLockUpdate = false;
-          
-        }
+        // Just call the command and after 5 seconds update the vehicle info
+        await vehicle.issueCommand(command);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await vehicle.retrieveVehicleInfo();
+      
+        const self = this;
         callback(undefined, value);
       })
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
@@ -115,7 +110,6 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         if (lockStatus === 'LOCKED') {
           lockNumber = hap.Characteristic.LockTargetState.SECURED;
         }
-
         callback(undefined, lockNumber);
         
         lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
@@ -132,6 +126,10 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         } else {
           await vehicle.issueCommand(Command.STOP);
         }
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await vehicle.retrieveVehicleInfo();
+
         callback(undefined, value);
       })
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
