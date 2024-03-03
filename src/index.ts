@@ -165,16 +165,6 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         }
         callback(undefined, level);
       
-        const fuel = vehicle?.info?.vehicleStatus.fuelLevel?.value as number;
-        const battery = vehicle?.info?.vehicleDetails.batteryChargeLevel?.value as number;
-        const chargingStatus = vehicle?.info?.vehicleStatus.chargingStatus?.value;
-        let level = fuel || battery || 100;
-        if (level > 100) {
-          level = 100;
-        }
-        if (level < 0) {
-          level = 0;
-        }
         batteryService.updateCharacteristic(hap.Characteristic.BatteryLevel, level);
         if (battery) {
           if (chargingStatus === 'ChargingAC') {
