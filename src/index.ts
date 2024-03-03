@@ -97,12 +97,12 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         // Just call the command and after 5 seconds update the vehicle info
         await vehicle.issueCommand(command);
         this.log.debug('Waiting 5 seconds to update vehicle info');
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 6000));
         this.log.debug('Done waiting...Updating vehicle info');
         await vehicle.retrieveVehicleInfo();
       
         const self = this;
-        callback(undefined, value);
+        callback();
       })
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
         // Return cached value immediately then update properly
@@ -129,10 +129,10 @@ class FordPassPlatform implements DynamicPlatformPlugin {
           await vehicle.issueCommand(Command.STOP);
         }
 
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 6000));
         await vehicle.retrieveVehicleInfo();
 
-        callback(undefined, value);
+        callback();
       })
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
         // Return cached value immediately then update properly
@@ -262,14 +262,8 @@ class FordPassPlatform implements DynamicPlatformPlugin {
     this.vehicles.forEach(async (vehicle: Vehicle) => {
 
       const statusReqId = await vehicle.issueCommand(Command.REFRESH);
-      let statusReqStatus = 'QUEUED';
-      let tries = 30;
-      if (statusReqId) {
-        while (statusReqStatus === 'QUEUED' && tries > 0) {
-          statusReqStatus = await vehicle.issueCommandRefresh(statusReqId, Command.REFRESH);
-          tries--;
-        }
-      }
+      // wait for 10 seconds before updating the vehicle info
+      await new Promise(resolve => setTimeout(resolve, 10000));
       await vehicle.retrieveVehicleInfo();
       const status = vehicle?.info?.vehicleStatus;
       const lockStatus = status?.lockStatus?.value;
