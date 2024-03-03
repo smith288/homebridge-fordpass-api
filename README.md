@@ -8,6 +8,9 @@ This is a Homebridge plugin that allows you to integrate your FordPass-enabled v
 - Charging Switch: Adds a button that can trigger automations when your EV begins charging.
 - Plug Switch: Adds a button that can trigger automations when your EV is plugged in.
 
+## Credit
+@Brandawg93 was the basis of this project.  Much of his code was reused for this one. Give them a shoutout!
+
 ## Installation
 
 1. Install the plugin through npm:
