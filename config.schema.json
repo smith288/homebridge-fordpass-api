@@ -1,0 +1,88 @@
+{
+  "pluginAlias": "FordPass",
+  "pluginType": "platform",
+  "singular": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "Mach-e"
+      },
+      "autoRefresh": {
+        "title": "Auto Refresh",
+        "type": "boolean",
+        "required": true,
+        "default": true,
+        "description": "If true, the plugin will automatically refresh the data."
+      },
+      "refreshRate": {
+        "title": "Refresh Rate",
+        "type": "integer",
+        "required": true,
+        "default": 60,
+        "description": "The number of minutes between data refreshes.  This is only used if autorefresh is true."
+      },
+      "batteryName": {
+        "title": "Battery Name",
+        "type": "string",
+        "required": true,
+        "default": "Battery",
+        "description": "The name of the battery device.",
+        "placeholder": "Battery"
+      },
+      "chargingSwitch":{ 
+        "title": "Charging Switch",
+        "type": "boolean",
+        "required": true,
+        "default": false,
+        "description": "Adds a button that can trigger automations when your ev begins charging."
+      },
+      "plugSwitch":{ 
+        "title": "Plug Switch",
+        "type": "boolean",
+        "required": true,
+        "default": false,
+        "description": "Adds a button that can trigger automations when your ev is plugged in."
+      },
+      "application_id": {
+        "title": "Application ID",
+        "type": "string",
+        "required": true,
+        "description": "Enter the application ID from the FordPass API Word Document when you requested access.  Its section 4 - Account Link and the url will have application_id querystring."
+      },
+      "client_id": {
+        "title": "Client ID",
+        "type": "string",
+        "required": true,
+        "description": "Enter the client ID from the FordPass API app when you requested access.  It's section 4 - Account Link and the url will have client_id querystring."
+      },
+      "client_secret": {
+        "title": "Client Secret",
+        "type": "string",
+        "required": true,
+        "description": "Enter the client secret from the FordPass API app when you requested access.  Usually starts with RHO"
+      },
+      "code": {
+        "title": "Code",
+        "type": "string",
+        "required": true,
+        "description": "Enter the code from the FordPass API app"
+      },
+      "access_token": {
+        "title": "Access Token",
+        "type": "string",
+        "required": false,
+        "description": "Plugin will populate this"
+      },
+      "refresh_token": {
+        "title": "Refresh Token",
+        "type": "string",
+        "required": false,
+        "description": "Plugin will populate this"
+      }
+    } 
+  }
+}
