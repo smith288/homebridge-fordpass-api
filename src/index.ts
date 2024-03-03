@@ -98,21 +98,13 @@ class FordPassPlatform implements DynamicPlatformPlugin {
 
         let tries = 30;
         this.pendingLockUpdate = true;
-        const self = this;
-        const interval = setInterval(async () => {
-          if (tries > 0) {
-            const status = await vehicle.issueCommandRefresh(commandId, command);
-            if (status?.currentStatus === 'SUCCESS') {
-              lockService.updateCharacteristic(hap.Characteristic.LockCurrentState, value);
-              self.pendingLockUpdate = false;
-              clearInterval(interval);
-            }
-            tries--;
-          } else {
-            self.pendingLockUpdate = false;
-            clearInterval(interval);
-          }
-        }, 3000);
+        const self = this; 
+        const status = await vehicle.issueCommandRefresh(commandId, command);
+        if (status?.currentStatus === 'SUCCESS') {
+          lockService.updateCharacteristic(hap.Characteristic.LockCurrentState, value);
+          self.pendingLockUpdate = false;
+          
+        }
         callback(undefined, value);
       })
       .on(CharacteristicEventTypes.GET, async (callback: CharacteristicGetCallback) => {
@@ -126,27 +118,17 @@ class FordPassPlatform implements DynamicPlatformPlugin {
 
         callback(undefined, lockNumber);
 
-        const statusReqId = await vehicle.issueCommand(Command.REFRESH);
-        let statusReqStatus = 'QUEUED';
-        let statusReq: any;
-        let tries = 30;
-        if (statusReqId) {
-          while (statusReqStatus === 'QUEUED' && tries > 0) {
-            statusReq = await vehicle.issueCommandRefresh(statusReqId, Command.REFRESH);
-            statusReqStatus = statusReq.commandStatus;
-            // pause for 1 second
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            tries--;
-          }
+        const vehicleInformationReq = await vehicle.retrieveVehicleInfo();
+        if (vehicleInformationReq) {
+          const lockStatus =
+            vehicle?.info?.vehicleStatus.lockStatus?.value || 'LOCKED';
           let lockNumber = hap.Characteristic.LockTargetState.UNSECURED;
-          const lockStatus = statusReq.vehiclestatus.lockStatus.value;
           if (lockStatus === 'LOCKED') {
             lockNumber = hap.Characteristic.LockTargetState.SECURED;
           }
-          lockService.updateCharacteristic(hap.Characteristic.LockCurrentState, lockNumber);
           lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
         } else {
-          self.log.error(`Cannot get information for ${accessory.displayName} lock.  Status: ${statusReqId}`);
+          self.log.error(`Cannot get information for ${accessory.displayName} lock`);
         }
       });
 
@@ -167,26 +149,10 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value || 'OFF';
         callback(undefined, engineStatus);
 
-        const statusReqId = await vehicle.issueCommand(Command.REFRESH);
-        let statusReqStatus = 'QUEUED';
-        let statusReq: any;
-        let tries = 30;
-        if (statusReqId) {
-          while (statusReqStatus === 'QUEUED' && tries > 0) {
-            statusReq = await vehicle.issueCommandRefresh(statusReqId, Command.REFRESH);
-            statusReqStatus = statusReq.commandStatus;
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            tries--;
-          }
-        }
-        await vehicle.retrieveVehicleInfo();
-        if (vehicle?.info?.vehicleStatus) {
-          let started = true;
-          const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value;
-          if (engineStatus === 'OFF') {
-            started = false;
-          }
-          switchService.updateCharacteristic(hap.Characteristic.On, started);
+        var vehicleInformationReq = await vehicle.retrieveVehicleInfo();
+        if (vehicleInformationReq) {
+          const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value || 'OFF';
+          switchService.updateCharacteristic(hap.Characteristic.On, engineStatus === 'ON');
         } else {
           self.log.error(`Cannot get information for ${accessory.displayName} engine`);
         }
@@ -215,7 +181,8 @@ class FordPassPlatform implements DynamicPlatformPlugin {
           while (statusReqStatus === 'QUEUED' && tries > 0) {
             const statusReq = await vehicle.issueCommandRefresh(statusReqId, Command.REFRESH);
             statusReqStatus = statusReq.commandStatus;
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            // make a while loop for 2 seconds
+            await new Promise(resolve => setTimeout(resolve, 2000));
             tries--;
           }
         }
