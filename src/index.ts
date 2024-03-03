@@ -118,13 +118,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
 
         callback(undefined, lockNumber);
         
-          const lockStatus =
-            vehicle?.info?.vehicleStatus.lockStatus?.value || 'LOCKED';
-          let lockNumber = hap.Characteristic.LockTargetState.UNSECURED;
-          if (lockStatus === 'LOCKED') {
-            lockNumber = hap.Characteristic.LockTargetState.SECURED;
-          }
-          lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
+        lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
 
       });
 
