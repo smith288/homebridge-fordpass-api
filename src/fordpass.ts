@@ -7,11 +7,6 @@ import { CommandStatus } from './types/command';
 import { FordpassConfig } from './types/config';
 import { once, EventEmitter } from 'events';
 
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-  'User-Agent': 'FordPass/5 CFNetwork/1333.0.4 Darwin/21.5.0',
-};
-
 
 const handleError = function (name: string, status: number, log: Logging): void {
   log.error(`${name} failed with status: ${status}`);
@@ -40,6 +35,12 @@ export class Vehicle extends EventEmitter {
   }
 
   async issueCommand(command: Command): Promise<string> {
+    
+    if(this.updating){
+      this.log.debug('Command already in progress');
+      return '';
+    }
+    this.updating = true;
 
     let commandType = '';
     switch (command) {
@@ -73,13 +74,15 @@ export class Vehicle extends EventEmitter {
 
       // Call the fordpass-connection commands here
 
-      const result = await new Connection(this.config, this.log).issueCommand(this.vehicleId, commandType);
-      if (result) {
-        return result.commandId;
-      }
       try{
-        this.log.debug(`Issuing command: ${commandType} for vehicle: ${this.vehicleId}`);
+        const result = await new Connection(this.config, this.log).issueCommand(this.vehicleId, commandType);
+        if (result) {
+          this.log.debug(`Issuing command: ${commandType} for vehicle: ${this.vehicleId}`);
+          this.updating = false;
+          return result.commandId;
+        }
       } catch (error: any) {
+        this.updating = false;
         this.log.error(`Error occurred during request: ${error.message}`);
         if (error.response) {
           // Log detailed information about the response if available
@@ -100,6 +103,11 @@ export class Vehicle extends EventEmitter {
 
   async issueCommandRefresh(commandId: string, command: Command): Promise<any> {
 
+    if(this.updating){
+      this.log.debug('Command already in progress');
+      return '';
+    }
+    this.updating = true;
     let commandType = '';
     switch (command) {
       case Command.START: {
@@ -129,13 +137,16 @@ export class Vehicle extends EventEmitter {
     }
 
     if (commandType) {
-      const result = await new Connection(this.config, this.log).issueCommandRefresh(commandId, this.vehicleId, commandType);
-      if (result) {
-        return result;
-      }
       try{
         this.log.debug(`Issuing command: ${commandType} for vehicle: ${this.vehicleId}`);
+        const result = await new Connection(this.config, this.log).issueCommandRefresh(commandId, this.vehicleId, commandType);
+        if (result) {
+          this.updating = false;
+          return result;
+        }
       } catch (error: any) {
+
+        this.updating = false;
         this.log.error(`Error occurred during request: ${error.message}`);
         if (error.response) {
           // Log detailed information about the response if available

@@ -174,19 +174,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         }
         callback(undefined, level);
 
-        const statusReqId = await vehicle.issueCommand(Command.REFRESH);
-        let statusReqStatus = 'QUEUED';
-        let tries = 30;
-        if (statusReqId) {
-          while (statusReqStatus === 'QUEUED' && tries > 0) {
-            const statusReq = await vehicle.issueCommandRefresh(statusReqId, Command.REFRESH);
-            statusReqStatus = statusReq.commandStatus;
-            // make a while loop for 2 seconds
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            tries--;
-          }
-        }
-        await vehicle.retrieveVehicleInfo();
+        var vehicleInformationReq = await vehicle.retrieveVehicleInfo();
         if (vehicle?.info?.vehicleStatus) {
           const fuel = vehicle?.info?.vehicleStatus.fuelLevel?.value as number;
           const battery = vehicle?.info?.vehicleDetails.batteryChargeLevel?.value as number;
