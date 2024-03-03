@@ -167,7 +167,6 @@ export class Vehicle extends EventEmitter {
 
   async retrieveVehicleInfo() {
 
-
     const result = await new Connection(this.config, this.log).getVehicleInformation(this.vehicleId);
     if (result) {
       this.info = result as VehicleInfo;

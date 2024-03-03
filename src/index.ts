@@ -117,9 +117,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         }
 
         callback(undefined, lockNumber);
-
-        const vehicleInformationReq = await vehicle.retrieveVehicleInfo();
-        if (vehicleInformationReq) {
+        
           const lockStatus =
             vehicle?.info?.vehicleStatus.lockStatus?.value || 'LOCKED';
           let lockNumber = hap.Characteristic.LockTargetState.UNSECURED;
@@ -127,9 +125,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
             lockNumber = hap.Characteristic.LockTargetState.SECURED;
           }
           lockService.updateCharacteristic(hap.Characteristic.LockTargetState, lockNumber);
-        } else {
-          self.log.error(`Cannot get information for ${accessory.displayName} lock`);
-        }
+
       });
 
     switchService
@@ -149,13 +145,8 @@ class FordPassPlatform implements DynamicPlatformPlugin {
         const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value || 'OFF';
         callback(undefined, engineStatus);
 
-        var vehicleInformationReq = await vehicle.retrieveVehicleInfo();
-        if (vehicleInformationReq) {
-          const engineStatus = vehicle?.info?.vehicleStatus.ignitionStatus.value || 'OFF';
-          switchService.updateCharacteristic(hap.Characteristic.On, engineStatus === 'ON');
-        } else {
-          self.log.error(`Cannot get information for ${accessory.displayName} engine`);
-        }
+        switchService.updateCharacteristic(hap.Characteristic.On, engineStatus === 'ON');
+      
       });
 
     batteryService
@@ -173,53 +164,49 @@ class FordPassPlatform implements DynamicPlatformPlugin {
           level = 0;
         }
         callback(undefined, level);
-
-        var vehicleInformationReq = await vehicle.retrieveVehicleInfo();
-        if (vehicle?.info?.vehicleStatus) {
-          const fuel = vehicle?.info?.vehicleStatus.fuelLevel?.value as number;
-          const battery = vehicle?.info?.vehicleDetails.batteryChargeLevel?.value as number;
-          const chargingStatus = vehicle?.info?.vehicleStatus.chargingStatus?.value;
-          let level = fuel || battery || 100;
-          if (level > 100) {
-            level = 100;
-          }
-          if (level < 0) {
-            level = 0;
-          }
-          batteryService.updateCharacteristic(hap.Characteristic.BatteryLevel, level);
-          if (battery) {
-            if (chargingStatus === 'ChargingAC') {
-              batteryService.updateCharacteristic(
-                hap.Characteristic.ChargingState,
-                hap.Characteristic.ChargingState.CHARGING,
-              );
-            } else {
-              batteryService.updateCharacteristic(
-                hap.Characteristic.ChargingState,
-                hap.Characteristic.ChargingState.NOT_CHARGING,
-              );
-            }
+      
+        const fuel = vehicle?.info?.vehicleStatus.fuelLevel?.value as number;
+        const battery = vehicle?.info?.vehicleDetails.batteryChargeLevel?.value as number;
+        const chargingStatus = vehicle?.info?.vehicleStatus.chargingStatus?.value;
+        let level = fuel || battery || 100;
+        if (level > 100) {
+          level = 100;
+        }
+        if (level < 0) {
+          level = 0;
+        }
+        batteryService.updateCharacteristic(hap.Characteristic.BatteryLevel, level);
+        if (battery) {
+          if (chargingStatus === 'ChargingAC') {
+            batteryService.updateCharacteristic(
+              hap.Characteristic.ChargingState,
+              hap.Characteristic.ChargingState.CHARGING,
+            );
           } else {
             batteryService.updateCharacteristic(
               hap.Characteristic.ChargingState,
-              hap.Characteristic.ChargingState.NOT_CHARGEABLE,
-            );
-          }
-
-          if (level < 10) {
-            batteryService.updateCharacteristic(
-              hap.Characteristic.StatusLowBattery,
-              hap.Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW,
-            );
-          } else {
-            batteryService.updateCharacteristic(
-              hap.Characteristic.StatusLowBattery,
-              hap.Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL,
+              hap.Characteristic.ChargingState.NOT_CHARGING,
             );
           }
         } else {
-          self.log.error(`Cannot get information for ${accessory.displayName} engine`);
+          batteryService.updateCharacteristic(
+            hap.Characteristic.ChargingState,
+            hap.Characteristic.ChargingState.NOT_CHARGEABLE,
+          );
         }
+
+        if (level < 10) {
+          batteryService.updateCharacteristic(
+            hap.Characteristic.StatusLowBattery,
+            hap.Characteristic.StatusLowBattery.BATTERY_LEVEL_LOW,
+          );
+        } else {
+          batteryService.updateCharacteristic(
+            hap.Characteristic.StatusLowBattery,
+            hap.Characteristic.StatusLowBattery.BATTERY_LEVEL_NORMAL,
+          );
+        }
+      
       });
     this.vehicles.push(vehicle);
     this.accessories.push(accessory);
