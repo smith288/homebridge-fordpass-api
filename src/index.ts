@@ -85,9 +85,14 @@ class FordPassPlatform implements DynamicPlatformPlugin {
     lockService.setCharacteristic(hap.Characteristic.LockCurrentState, defaultState);
 
     lockService
-      //.setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
+      .setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
       .getCharacteristic(hap.Characteristic.LockTargetState)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        if(value !== (vehicle?.info?.vehicleStatus.lockStatus.value === 'LOCKED')){
+          this.log.debug('LOCK is already in the requested state');
+          callback();
+          return;
+        }
         this.log.debug(`SET ${value ? 'Locking' : 'Unlocking'} ${accessory.displayName}`);
         let command = Command.LOCK;
         if (value === hap.Characteristic.LockTargetState.UNSECURED) {
@@ -118,9 +123,14 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       });
 
     switchService
-      //.setCharacteristic(hap.Characteristic.On, false)
+      .setCharacteristic(hap.Characteristic.On, false)
       .getCharacteristic(hap.Characteristic.On)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        if(value !== (vehicle?.info?.vehicleStatus.ignitionStatus.value === 'ON')){
+          this.log.debug('Engine is already in the requested state');
+          callback();
+          return;
+        }
         this.log.debug(`${value ? 'Starting' : 'Stopping'} ${accessory.displayName}`);
         if (value as boolean) {
           await vehicle.issueCommand(Command.START);
