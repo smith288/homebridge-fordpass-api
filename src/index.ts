@@ -88,6 +88,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       .setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
       .getCharacteristic(hap.Characteristic.LockTargetState)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        this.log.debug(`SET ${value ? 'Locking' : 'Unlocking'} ${accessory.displayName} ${vehicle?.info?.vehicleStatus.lockStatus?.value}`);
         if(value != (vehicle?.info?.vehicleStatus.lockStatus?.value === 'LOCKED')){
           this.log.debug('LOCK is already in the requested state');
           callback();
@@ -126,6 +127,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       .setCharacteristic(hap.Characteristic.On, false)
       .getCharacteristic(hap.Characteristic.On)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
+        this.log.debug(`SET ${value ? 'Starting' : 'Stopping'} ${accessory.displayName} ${vehicle?.info?.vehicleStatus.lockStatus?.value}`);
         if(value !== (vehicle?.info?.vehicleStatus.ignitionStatus.value === 'ON')){
           this.log.debug('Engine is already in the requested state');
           callback();
