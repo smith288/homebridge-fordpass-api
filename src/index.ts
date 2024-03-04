@@ -85,7 +85,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
     lockService.setCharacteristic(hap.Characteristic.LockCurrentState, defaultState);
 
     lockService
-      .setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
+      //.setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
       .getCharacteristic(hap.Characteristic.LockTargetState)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
         this.log.debug(`SET ${value ? 'Locking' : 'Unlocking'} ${accessory.displayName}`);
@@ -118,7 +118,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       });
 
     switchService
-      .setCharacteristic(hap.Characteristic.On, false)
+      //.setCharacteristic(hap.Characteristic.On, false)
       .getCharacteristic(hap.Characteristic.On)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
         this.log.debug(`${value ? 'Starting' : 'Stopping'} ${accessory.displayName}`);
