@@ -7,11 +7,6 @@ import { CommandStatus } from './types/command';
 import { FordpassConfig } from './types/config';
 import { once, EventEmitter } from 'events';
 
-
-const handleError = function (name: string, status: number, log: Logging): void {
-  log.error(`${name} failed with status: ${status}`);
-};
-
 export class Vehicle extends EventEmitter {
   private config: FordpassConfig;
   private readonly log: Logging;
