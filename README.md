@@ -13,16 +13,24 @@ This is a Homebridge plugin that allows you to integrate your FordPass-enabled v
 
 ## FordPass API Process
 
-1. Sign up at FordPass API program at [developer.ford.com](https://developer.ford.com/).
-2. Go to [FordConnect](https://developer.ford.com/apis/fordconnect) and request access.
-3. Create Application Credentials at [https://developer.ford.com/my-developer-account/my-dashboard](https://developer.ford.com/my-developer-account/my-dashboard) and copy both Client ID and Secret 1 Hint.
-  <img alt="FordPass API Application Credentials" src="https://raw.githubusercontent.com/smith288/homebridge-fordpass-api/master/media/ford-application.png"></a>
-4. Construct this URL in your Browser: 
+1. First, you MUST have a FordPass account. If you don't, you will need to do that first and that's outside of the scope for these instructions. [Start here](https://www.ford.com/support/how-tos/fordpass/getting-started-with-fordpass/download-fordpass/)
+2. Sign up at FordPass API program at [developer.ford.com](https://developer.ford.com/).
+3. Go to [FordConnect](https://developer.ford.com/apis/fordconnect) and request access.
+4. Create Application Credentials at [https://developer.ford.com/my-developer-account/my-dashboard](https://developer.ford.com/my-developer-account/my-dashboard) and copy Secret 1 Hint.
+  <img alt="FordPass API Application Credentials" src="https://raw.githubusercontent.com/smith288/homebridge-fordpass-api/master/media/ford-application.png">
+5. Construct this URL in your Browser: 
 
 ```
-https://fordconnect.cv.ford.com/common/login/?make=F&application_id=[APPLICATION_ID]&client_id=[CLIENT_ID]&response_type=code&state=123&redirect_uri=https%3A%2F%2Flocalhost%3A3000&scope=access
+https://fordconnect.cv.ford.com/common/login/?make=F&application_id=AFDC085B-377A-4351-B23E-5E1D35FB3700&client_id=30990062-9618-40e1-a27b-7c6bcb23658a&response_type=code&state=123&redirect_uri=https%3A%2F%2Flocalhost%3A3000&scope=access
 ```
+6. Sign in with your FordPass login that you use for FordPass' app. 
+7. Select the car you wish to integrate with.
+8. Click Authorize
+9. The page will eventually send you to an invalid page.  This is normal. Copy the URL into a notepad, delete everything from the beginning until after code=
+  <img alt="FordPass API Application Credentials" src="https://raw.githubusercontent.com/smith288/homebridge-fordpass-api/master/media/ford-authorize.png">
 
+10. Take the remaining text and copy it for the FordPass Plugin config.
+11. Same goes for the Client Secret.
 
 ## Installation
 
@@ -45,8 +53,6 @@ npm install homebridge-fordpass-api
       "batteryName": "Battery",
       "chargingSwitch": false,
       "plugSwitch": false,
-      "application_id": "<Your Application ID>",
-      "client_id": "<Your Client ID>",
       "client_secret": "<Your Client Secret>",
       "code": "<Your Code>"
     }
@@ -64,8 +70,6 @@ The following properties are available for configuration in the `config.json`:
 - `batteryName`: The name of the battery device.
 - `chargingSwitch`: Adds a button that can trigger automations when your EV begins charging.
 - `plugSwitch`: Adds a button that can trigger automations when your EV is plugged in.
-- `application_id`: Enter the application ID from the FordPass API Word Document when you requested access.
-- `client_id`: Enter the client ID from the FordPass API app when you requested access.
 - `client_secret`: Enter the client secret from the FordPass API app when you requested access.
 - `code`: Enter the code from the FordPass API app.
 
