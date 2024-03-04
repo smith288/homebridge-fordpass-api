@@ -88,7 +88,7 @@ class FordPassPlatform implements DynamicPlatformPlugin {
       .setCharacteristic(hap.Characteristic.LockTargetState, defaultState)
       .getCharacteristic(hap.Characteristic.LockTargetState)
       .on(CharacteristicEventTypes.SET, async (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
-        if(value !== (vehicle?.info?.vehicleStatus.lockStatus.value === 'LOCKED')){
+        if(value != (vehicle?.info?.vehicleStatus.lockStatus.value === 'LOCKED')){
           this.log.debug('LOCK is already in the requested state');
           callback();
           return;
