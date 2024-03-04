@@ -11,6 +11,19 @@ This is a Homebridge plugin that allows you to integrate your FordPass-enabled v
 ## Credit
 [@Brandawg93](https://github.com/Brandawg93/homebridge-fordpass) was the basis of this project.  Much of his code was reused for this one. Give them a shoutout!
 
+## FordPass API Process
+
+1. Sign up at FordPass API program at [developer.ford.com](https://developer.ford.com/).
+2. Go to [FordConnect](https://developer.ford.com/apis/fordconnect) and request access.
+3. Create Application Credentials at [https://developer.ford.com/my-developer-account/my-dashboard](https://developer.ford.com/my-developer-account/my-dashboard) and copy both Client ID and Secret 1 Hint.
+  <img alt="FordPass API Application Credentials" src="https://raw.githubusercontent.com/smith288/homebridge-fordpass-api/master/media/ford-application.png"></a>
+4. Construct this URL in your Browser: 
+
+```
+https://fordconnect.cv.ford.com/common/login/?make=F&application_id=[APPLICATION_ID]&client_id=[CLIENT_ID]&response_type=code&state=123&redirect_uri=https%3A%2F%2Flocalhost%3A3000&scope=access
+```
+
+
 ## Installation
 
 1. Install the plugin through npm:
