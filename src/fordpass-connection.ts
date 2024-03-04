@@ -6,6 +6,8 @@ import { URLSearchParams } from 'url';
 import FormData from 'form-data';
 import { VehicleInfo } from './types/vehicle';
 
+const application_id = 'AFDC085B-377A-4351-B23E-5E1D35FB3700';
+const client_id = '30990062-9618-40e1-a27b-7c6bcb23658a';
 const authorizeUrl = 'https://dah2vb2cprod.b2clogin.com/914d88b1-3523-4bf6-9be4-1b96b4f6f919/oauth2/v2.0/token?p=B2C_1A_signup_signin_common';
 const baseApiUrl = 'https://api.mps.ford.com/api/fordconnect';
 const vehiclesUrl = '/v2/vehicles';
@@ -64,7 +66,7 @@ export class Connection {
       url: baseApiUrl + vehiclesUrl,
       headers: {
         'Content-Type': 'application/json',
-        'Application-Id': this.config.application_id,
+        'Application-Id': application_id,
         'Authorization': `Bearer ${this.config.access_token}`,
       },
     };
@@ -113,7 +115,7 @@ export class Connection {
       url: baseApiUrl + vehicleInformationUrl.replace('{vehicleId}', vehicleId),
       headers: {
         'Content-Type': 'application/json',
-        'Application-Id': this.config.application_id,
+        'Application-Id': application_id,
         'Authorization': `Bearer ${this.config.access_token}`,
       },
     };
@@ -174,7 +176,7 @@ export class Connection {
       url: baseApiUrl + url.replace('{vehicleId}', vehicleId),
       headers: {
         'Content-Type': 'application/json',
-        'Application-Id': this.config.application_id,
+        'Application-Id': application_id,
         'Authorization': `Bearer ${this.config.access_token}`,
       },
     };
@@ -231,7 +233,7 @@ export class Connection {
       url: baseApiUrl + url.replace('{commandId}', commandId),
       headers: {
         'Content-Type': 'application/json',
-        'Application-Id': this.config.application_id,
+        'Application-Id': application_id,
         'Authorization': `Bearer ${this.config.access_token}`,
       },
     };
@@ -274,8 +276,8 @@ export class Connection {
   }
 
   async auth(): Promise<any> {
-    if(!this.config.code && !this.config.client_id && !this.config.client_secret){
-      this.log.debug('Missing code, client_id or client_secret');
+    if(!this.config.code && !this.config.client_secret){
+      this.log.debug('Missing code or client_secret');
       return;
     }
 
@@ -304,7 +306,7 @@ export class Connection {
       const data = new FormData();
       data.append('grant_type', 'refresh_token');
       data.append('refresh_token', this.config.refresh_token);
-      data.append('client_id', this.config.client_id);
+      data.append('client_id', client_id);
       data.append('client_secret', this.config.client_secret);
 
       const options = {
@@ -346,7 +348,7 @@ export class Connection {
   async getAutonomicToken(): Promise<any> {
     const data = new URLSearchParams();
     data.append('grant_type', 'authorization_code');
-    data.append('client_id', this.config.client_id);
+    data.append('client_id', client_id);
     data.append('client_secret', this.config.client_secret);
     data.append('code', this.config.code);
     data.append('redirect_url', 'https://localhost:3000');

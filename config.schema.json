@@ -47,18 +47,6 @@
         "default": false,
         "description": "Adds a button that can trigger automations when your ev is plugged in."
       },
-      "application_id": {
-        "title": "Application ID",
-        "type": "string",
-        "required": true,
-        "description": "Enter the application ID from the FordPass API Word Document when you requested access.  Its section 4 - Account Link and the url will have application_id querystring."
-      },
-      "client_id": {
-        "title": "Client ID",
-        "type": "string",
-        "required": true,
-        "description": "Enter the client ID from the FordPass API app when you requested access.  It's section 4 - Account Link and the url will have client_id querystring."
-      },
       "client_secret": {
         "title": "Client Secret",
         "type": "string",

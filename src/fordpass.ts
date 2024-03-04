@@ -16,7 +16,6 @@ export class Vehicle extends EventEmitter {
   private config: FordpassConfig;
   private readonly log: Logging;
   public info: VehicleInfo | undefined;
-  private applicationId: string;
   private updating = false;
   name: string;
   vehicleId: string;
@@ -31,7 +30,6 @@ export class Vehicle extends EventEmitter {
     this.vehicleId = vehicleId;
     this.autoRefresh = config.options?.autoRefresh || false;
     this.refreshRate = config.options?.refreshRate || 180;
-    this.applicationId = config.options?.application_id || '';
   }
 
   async issueCommand(command: Command): Promise<string> {

@@ -7,9 +7,7 @@ interface Options {
   batteryName?: string;
   chargingSwitch?: boolean;
   plugSwitch?: boolean;
-  application_id?: string;
   region?: string;
-  client_id?: string;
   client_secret?: string;
   code?: string;
   access_token?: string;
