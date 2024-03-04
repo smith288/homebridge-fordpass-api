@@ -1,11 +1,8 @@
-import axios from 'axios';
-import { AxiosRequestConfig } from 'axios';
 import { Logging } from 'homebridge';
 import { VehicleInfo, Command } from './types/vehicle';
 import { Connection } from './fordpass-connection';
-import { CommandStatus } from './types/command';
 import { FordpassConfig } from './types/config';
-import { once, EventEmitter } from 'events';
+import { EventEmitter } from 'events';
 
 export class Vehicle extends EventEmitter {
   private config: FordpassConfig;

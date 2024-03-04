@@ -28,18 +28,6 @@ const vehicleStopChargeRefreshUrl = '/v1/vehicles/{vehicleId}/stopCharge/{comman
 const vehicleCapabilitiesUrl = '/v3/vehicles/{vehicleId}/capabilities';
 const vehicleInformationUrl = '/v3/vehicles/{vehicleId}';
 
-
-const randomStr = (len: number): string => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const charactersLength = characters.length;
-  for (let i = 0; i < len; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
-
-
 const headers = {
   'User-Agent': 'Mozilla/5.0',
   'Accept-Language': 'en-US,en;q=0.9',
